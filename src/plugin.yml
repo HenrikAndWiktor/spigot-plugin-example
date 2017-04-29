@@ -1,0 +1,44 @@
+name: SpigotTest
+version: 1.0.1
+author: Wiktor Eriksson
+main: se.wiktoreriksson.spigottest.Main
+commands:
+      hello:
+               description: Say "hello".
+               usage: /hello
+      ptp:
+               description: Teleport to a player.
+               usage: /ptp <player name>
+      superpower:
+               description: (Only for console) Give all players superpowers for 1000 seconds.
+               usage: /superpower
+
+      fakeblock:
+               description: Creates an fake block.
+               usage: /fakeblock <block ID>
+               permission: spigottest.cmd.summon.falling_block
+               permission-message: You don't have the permission spigottest.cmd.summon.falling_block. If you think this is an error, contact the server administrator.
+      floatingtext:
+               description: Creates text in the air.
+               usage: /floatingtext <text>
+               permission: spigottest.cmd.summon.armor_stand
+               permission-message: You don't have the permission spigottest.cmd.summon.falling_block. If you think this is an error, contact the server administrator.
+      bb:
+               description: Make a boss bar named "Hello!".
+               usage: /bb
+               permission: spigottest.cmd.boss.create.bar
+               permission-message: You don't have the permission spigottest.cmd.boss.create.bar. If you think this is an error, contact the server administrator.
+      sf:
+               description: Make new furnace recipe. Smelt 1 cobblestone and you'll get 2 iron nuggets.
+               usage: /sf
+               permission: spigottest.cmd.furnace.change
+               permission-message: You don't have the permission spigottest.cmd.furnace.change. If you think this is an error, contact the server administrator.
+permissions:
+      spigottest.cmd.furnace.change:
+               default: op
+      spigottest.cmd.boss.create.bar:
+               default: op
+      spigottest.cmd.summon.falling_block:
+               default: op
+      spigottest.cmd.summon.armor_stand:
+               default: op

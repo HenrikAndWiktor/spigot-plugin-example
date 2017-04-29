@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="spigottest" default="all">
+  
+  
+  <property file="spigottest.properties"/>
+  <!-- Uncomment the following property if no tests compilation is needed -->
+  <!-- 
+  <property name="skip.tests" value="true"/>
+   -->
+  
+  <!-- Compiler options -->
+  
+  <property name="compiler.debug" value="on"/>
+  <property name="compiler.generate.no.warnings" value="off"/>
+  <property name="compiler.args" value=""/>
+  <property name="compiler.max.memory" value="700m"/>
+  <patternset id="ignored.files">
+    <exclude name="**/*.hprof/**"/>
+    <exclude name="**/*.pyc/**"/>
+    <exclude name="**/*.pyo/**"/>
+    <exclude name="**/*.rbc/**"/>
+    <exclude name="**/*~/**"/>
+    <exclude name="**/.DS_Store/**"/>
+    <exclude name="**/.git/**"/>
+    <exclude name="**/.hg/**"/>
+    <exclude name="**/.svn/**"/>
+    <exclude name="**/CVS/**"/>
+    <exclude name="**/RCS/**"/>
+    <exclude name="**/SCCS/**"/>
+    <exclude name="**/__pycache__/**"/>
+    <exclude name="**/_svn/**"/>
+    <exclude name="**/rcs/**"/>
+    <exclude name="**/vssver.scc/**"/>
+    <exclude name="**/vssver2.scc/**"/>
+  </patternset>
+  <patternset id="library.patterns">
+    <include name="*.war"/>
+    <include name="*.swc"/>
+    <include name="*.apk"/>
+    <include name="*.zip"/>
+    <include name="*.egg"/>
+    <include name="*.ane"/>
+    <include name="*.jar"/>
+    <include name="*.ear"/>
+  </patternset>
+  <patternset id="compiler.resources">
+    <exclude name="**/?*.java"/>
+    <exclude name="**/?*.form"/>
+    <exclude name="**/?*.class"/>
+    <exclude name="**/?*.groovy"/>
+    <exclude name="**/?*.scala"/>
+    <exclude name="**/?*.flex"/>
+    <exclude name="**/?*.kt"/>
+    <exclude name="**/?*.clj"/>
+    <exclude name="**/?*.aj"/>
+  </patternset>
+  
+  <!-- JDK definitions -->
+  
+  <property name="jdk.bin.1.8" value="${jdk.home.1.8}/bin"/>
+  <path id="jdk.classpath.1.8">
+    <fileset dir="${jdk.home.1.8}">
+      <include name="jre/lib/charsets.jar"/>
+      <include name="jre/lib/deploy.jar"/>
+      <include name="jre/lib/ext/cldrdata.jar"/>
+      <include name="jre/lib/ext/dnsns.jar"/>
+      <include name="jre/lib/ext/jaccess.jar"/>
+      <include name="jre/lib/ext/jfxrt.jar"/>
+      <include name="jre/lib/ext/localedata.jar"/>
+      <include name="jre/lib/ext/nashorn.jar"/>
+      <include name="jre/lib/ext/sunec.jar"/>
+      <include name="jre/lib/ext/sunjce_provider.jar"/>
+      <include name="jre/lib/ext/sunpkcs11.jar"/>
+      <include name="jre/lib/ext/zipfs.jar"/>
+      <include name="jre/lib/javaws.jar"/>
+      <include name="jre/lib/jce.jar"/>
+      <include name="jre/lib/jfr.jar"/>
+      <include name="jre/lib/jfxswt.jar"/>
+      <include name="jre/lib/jsse.jar"/>
+      <include name="jre/lib/management-agent.jar"/>
+      <include name="jre/lib/plugin.jar"/>
+      <include name="jre/lib/resources.jar"/>
+      <include name="jre/lib/rt.jar"/>
+      <include name="lib/ant-javafx.jar"/>
+      <include name="lib/dt.jar"/>
+      <include name="lib/javafx-mx.jar"/>
+      <include name="lib/jconsole.jar"/>
+      <include name="lib/packager.jar"/>
+      <include name="lib/sa-jdi.jar"/>
+      <include name="lib/tools.jar"/>
+    </fileset>
+  </path>
+  
+  <property name="project.jdk.home" value="${jdk.home.1.8}"/>
+  <property name="project.jdk.bin" value="${jdk.bin.1.8}"/>
+  <property name="project.jdk.classpath" value="jdk.classpath.1.8"/>
+  
+  <!-- Modules -->
+  
+  
+  <!-- Module SpigotTest -->
+  
+  <dirname property="module.spigottest.basedir" file="${ant.file}"/>
+  
+  
+  <property name="module.jdk.home.spigottest" value="${project.jdk.home}"/>
+  <property name="module.jdk.bin.spigottest" value="${project.jdk.bin}"/>
+  <property name="module.jdk.classpath.spigottest" value="${project.jdk.classpath}"/>
+  
+  <property name="compiler.args.spigottest" value="-encoding UTF-8 -source 8 -target 8 ${compiler.args}"/>
+
+  <property name="spigottest.output.dir" value="${module.spigottest.basedir}/out/production/SpigotTest"/>
+  <property name="spigottest.testoutput.dir" value="${module.spigottest.basedir}/out/test/SpigotTest"/>
+  
+  <path id="spigottest.module.bootclasspath">
+    <!-- Paths to be included in compilation bootclasspath -->
+  </path>
+  
+  <path id="spigottest.module.production.classpath">
+    <path refid="${module.jdk.classpath.spigottest}"/>
+    <pathelement location="${basedir}/spigot-1.11.2-R0.1-SNAPSHOT.jar"/>
+  </path>
+  
+  <path id="spigottest.runtime.production.module.classpath">
+    <pathelement location="${spigottest.output.dir}"/>
+    <pathelement location="${basedir}/spigot-1.11.2-R0.1-SNAPSHOT.jar"/>
+  </path>
+  
+  <path id="spigottest.module.classpath">
+    <path refid="${module.jdk.classpath.spigottest}"/>
+    <pathelement location="${spigottest.output.dir}"/>
+    <pathelement location="${basedir}/spigot-1.11.2-R0.1-SNAPSHOT.jar"/>
+  </path>
+  
+  <path id="spigottest.runtime.module.classpath">
+    <pathelement location="${spigottest.testoutput.dir}"/>
+    <pathelement location="${spigottest.output.dir}"/>
+    <pathelement location="${basedir}/spigot-1.11.2-R0.1-SNAPSHOT.jar"/>
+  </path>
+  
+  
+  <patternset id="excluded.from.module.spigottest">
+    <patternset refid="ignored.files"/>
+  </patternset>
+  
+  <patternset id="excluded.from.compilation.spigottest">
+    <patternset refid="excluded.from.module.spigottest"/>
+  </patternset>
+  
+  <path id="spigottest.module.sourcepath">
+    <dirset dir="${module.spigottest.basedir}">
+      <include name="src"/>
+    </dirset>
+  </path>
+  <target name="makeJar" description="make jar">
+    <delete dir="ant" verbose="true"/>
+    <mkdir dir="ant/build/jar"/>
+    <mkdir dir="ant/build/classes"/>
+    <javac compiler="javac1.8" classpath="${basedir}/spigot-1.11.2-R0.1-SNAPSHOT.jar" srcdir="src" destdir="ant/build/classes" verbose="true"/>
+    <copy todir="ant/build/classes">
+      <fileset dir="src">
+        <include name="**/*.class"/>
+        <include name="**/*.yml"/>
+      </fileset>
+    </copy>
+    <jar destfile="ant/build/jar/SpigotTest.jar" basedir="ant/build/classes"/>
+  </target>
+  
+</project>
