@@ -1,18 +1,20 @@
 package se.wiktoreriksson.spigottest;
 
 import org.bukkit.*;
-import org.bukkit.block.Block;
 import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarStyle;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandException;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.FallingBlock;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.inventory.FurnaceRecipe;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
@@ -21,12 +23,30 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
+import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.attribute.FileAttribute;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.logging.Level;
 
 public class Main extends JavaPlugin implements Listener {
+    YamlConfiguration yc;
+    @EventHandler public void onLogin(PlayerJoinEvent ple) {
+        Player p = ple.getPlayer();
+        ple.setJoinMessage(p.hasPlayedBefore() ? "§fHello, " + p.getName() + "!" : "§fWelcome to the server, " + p.getName() + "!");
+        if (!p.hasPlayedBefore()) {
+            try {
+                if (!Files.exists(new File("spigottest.yml").toPath())) Files.createFile(new File("spigottest.yml").toPath(), null);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            yc = YamlConfiguration.loadConfiguration(new File("spigottest.yml"));
+
+            try {yc.save("spigottest.yml");} catch (Exception ex) {/*ignore*/}
+        }
+    }
     /**
      * This method executes when this plugin disables.
      * @since SpigotTest 1.0
@@ -44,36 +64,8 @@ public class Main extends JavaPlugin implements Listener {
      */
     @Override
     public void onEnable() {
-        Bukkit.getLogger().log(Level.INFO, "Starting SpigotTest (1.0.1, author: Wiktor Eriksson)......\nDone!");
         getServer().getPluginManager().registerEvents(this, this);
-    }
-    public static List<Block> blocksFromTwoPoints(Location loc1, Location loc2)
-    {
-        List<Block> blocks = new ArrayList<>();
-
-        int topBlockX = (loc1.getBlockX() < loc2.getBlockX() ? loc2.getBlockX() : loc1.getBlockX());
-        int bottomBlockX = (loc1.getBlockX() > loc2.getBlockX() ? loc2.getBlockX() : loc1.getBlockX());
-
-        int topBlockY = (loc1.getBlockY() < loc2.getBlockY() ? loc2.getBlockY() : loc1.getBlockY());
-        int bottomBlockY = (loc1.getBlockY() > loc2.getBlockY() ? loc2.getBlockY() : loc1.getBlockY());
-
-        int topBlockZ = (loc1.getBlockZ() < loc2.getBlockZ() ? loc2.getBlockZ() : loc1.getBlockZ());
-        int bottomBlockZ = (loc1.getBlockZ() > loc2.getBlockZ() ? loc2.getBlockZ() : loc1.getBlockZ());
-
-        for(int x = bottomBlockX; x <= topBlockX; x++)
-        {
-            for(int z = bottomBlockZ; z <= topBlockZ; z++)
-            {
-                for(int y = bottomBlockY; y <= topBlockY; y++)
-                {
-                    Block block = loc1.getWorld().getBlockAt(x, y, z);
-
-                    blocks.add(block);
-                }
-            }
-        }
-
-        return blocks;
+        Bukkit.getLogger().log(Level.INFO, "Starting SpigotTest (1.0.1, author: Wiktor Eriksson)......\nDone!");
     }
 
     /**
