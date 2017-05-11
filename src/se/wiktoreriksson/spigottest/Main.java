@@ -32,21 +32,22 @@ import java.util.List;
 import java.util.logging.Level;
 
 public class Main extends JavaPlugin implements Listener {
-    YamlConfiguration yc;
+    private YamlConfiguration yc;
     @EventHandler public void onLogin(PlayerJoinEvent ple) {
         Player p = ple.getPlayer();
         ple.setJoinMessage(p.hasPlayedBefore() ? "§fHello, " + p.getName() + "!" : "§fWelcome to the server, " + p.getName() + "!");
         if (!p.hasPlayedBefore()) {
             try {
-                if (!Files.exists(new File("spigottest.yml").toPath())) Files.createFile(new File("spigottest.yml").toPath(), null);
+                if (!Files.exists(new File("serverplayers.yml").toPath())) new PrintWriter("serverplayers.yml").close();
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            yc = YamlConfiguration.loadConfiguration(new File("spigottest.yml"));
-
-            try {yc.save("spigottest.yml");} catch (Exception ex) {/*ignore*/}
+            yc = YamlConfiguration.loadConfiguration(new File("serverplayers.yml"));
+            yc.set("players", ((yc.isSet("players"))?yc.getString("players"):"")+", ");
+            try {yc.save("serverplayers.yml");} catch (Exception ex) {/*ignore*/}
         }
     }
+
     /**
      * This method executes when this plugin disables.
      * @since SpigotTest 1.0
