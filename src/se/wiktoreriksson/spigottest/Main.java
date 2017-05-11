@@ -3,17 +3,12 @@ package se.wiktoreriksson.spigottest;
 import org.bukkit.*;
 import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarStyle;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandException;
-import org.bukkit.command.CommandSender;
-import org.bukkit.command.ConsoleCommandSender;
+import org.bukkit.command.*;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.FallingBlock;
 import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.HandlerList;
-import org.bukkit.event.Listener;
+import org.bukkit.event.*;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.inventory.FurnaceRecipe;
 import org.bukkit.inventory.ItemStack;
@@ -25,14 +20,12 @@ import org.bukkit.potion.PotionEffectType;
 
 import java.io.*;
 import java.nio.file.Files;
-import java.nio.file.attribute.FileAttribute;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.logging.Level;
 
 public class Main extends JavaPlugin implements Listener {
-    private YamlConfiguration yc;
     @EventHandler public void onLogin(PlayerJoinEvent ple) {
         Player p = ple.getPlayer();
         ple.setJoinMessage(p.hasPlayedBefore() ? "§fHello, " + p.getName() + "!" : "§fWelcome to the server, " + p.getName() + "!");
@@ -42,9 +35,10 @@ public class Main extends JavaPlugin implements Listener {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            yc = YamlConfiguration.loadConfiguration(new File("serverplayers.yml"));
-            yc.set("players", ((yc.isSet("players"))?yc.getString("players"):"")+", ");
-            try {yc.save("serverplayers.yml");} catch (Exception ex) {/*ignore*/}
+            YamlConfiguration yc = YamlConfiguration.loadConfiguration(new File("serverplayers.yml"));
+            yc.set("players", ((yc.isSet("players"))? yc.getString("players"):"")+", ");
+            try {
+                yc.save("serverplayers.yml");} catch (Exception ex) {/*ignore*/}
         }
     }
 
