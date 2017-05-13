@@ -1,14 +1,22 @@
 package se.wiktoreriksson.spigottest;
 
-import org.bukkit.*;
+import org.bukkit.Bukkit;
+import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.World;
 import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarStyle;
-import org.bukkit.command.*;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandException;
+import org.bukkit.command.CommandSender;
+import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.FallingBlock;
 import org.bukkit.entity.Player;
-import org.bukkit.event.*;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.HandlerList;
+import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.inventory.FurnaceRecipe;
 import org.bukkit.inventory.ItemStack;
@@ -18,15 +26,19 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Random;
 import java.util.logging.Level;
 
 public class Main extends JavaPlugin implements Listener {
-    @EventHandler public void onLogin(PlayerJoinEvent ple) {
+    @EventHandler
+    public void onLogin(PlayerJoinEvent ple) {
         Player p = ple.getPlayer();
         ple.setJoinMessage(p.hasPlayedBefore() ? "§fHello, " + p.getName() + "!" : "§fWelcome to the server, " + p.getName() + "!");
         if (!p.hasPlayedBefore()) {
@@ -37,8 +49,7 @@ public class Main extends JavaPlugin implements Listener {
             }
             YamlConfiguration yc = YamlConfiguration.loadConfiguration(new File("serverplayers.yml"));
             yc.set("players", ((yc.isSet("players"))? yc.getString("players"):"")+", ");
-            try {
-                yc.save("serverplayers.yml");} catch (Exception ex) {/*ignore*/}
+            try {yc.save("serverplayers.yml");} catch (Exception ex) {/*ignore*/}
         }
     }
 
