@@ -1,9 +1,6 @@
 package se.wiktoreriksson.spigottest;
 
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.World;
+import org.bukkit.*;
 import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarStyle;
 import org.bukkit.command.Command;
@@ -12,12 +9,14 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.ArmorStand;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.FallingBlock;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.inventory.FurnaceRecipe;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
@@ -33,12 +32,11 @@ import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.Random;
 import java.util.logging.Level;
 
 public class Main extends JavaPlugin implements Listener {
-    @EventHandler
-    public void onLogin(PlayerJoinEvent ple) {
+    private final List<Player> vanished = new ArrayList<>();
+    @EventHandler public void onLogin(PlayerJoinEvent ple) {
         Player p = ple.getPlayer();
         ple.setJoinMessage(p.hasPlayedBefore() ? "§fHello, " + p.getName() + "!" : "§fWelcome to the server, " + p.getName() + "!");
         if (!p.hasPlayedBefore()) {
@@ -51,8 +49,13 @@ public class Main extends JavaPlugin implements Listener {
             yc.set("players", ((yc.isSet("players"))? yc.getString("players"):"")+", ");
             try {yc.save("serverplayers.yml");} catch (Exception ex) {/*ignore*/}
         }
+        for (Player p1 : vanished) {
+            p.hidePlayer(p1);
+        }
     }
-
+    @EventHandler public void onLogout(org.bukkit.event.player.PlayerQuitEvent pqe) {
+        vanished.remove(pqe.getPlayer());
+    }
     /**
      * This method executes when this plugin disables.
      * @since SpigotTest 1.0
@@ -144,6 +147,26 @@ public class Main extends JavaPlugin implements Listener {
                     sm.setOwner(args[0]);
                     p.getInventory().addItem(is);
                     return true;
+                }
+
+                if (command.getName().equalsIgnoreCase("vanish")) {
+                    // Check perms
+                    if (!vanished.contains(p)) {
+                        for (Player pl : Bukkit.getServer().getOnlinePlayers()) {
+                            pl.hidePlayer(p);
+                        }
+                        vanished.add(p);
+                        p.sendMessage(ChatColor.GREEN + "You have been vanished!");
+                        return true;
+                    }
+                    else {
+                        for (Player pl : Bukkit.getServer().getOnlinePlayers()) {
+                            pl.showPlayer(p);
+                        }
+                        vanished.remove(p);
+                        p.sendMessage(ChatColor.GREEN + "You have been unvanished!");
+                        return true;
+                    }
                 }
                 if ("ptp".equalsIgnoreCase(command.getName())) {
                     Player target;

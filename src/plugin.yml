@@ -33,6 +33,9 @@ commands:
                usage: /sf
                permission: spigottest.cmd.furnace.change
                permission-message: You don't have the permission spigottest.cmd.furnace.change. If you think this is an error, contact the server administrator.
+      vanish:
+               description: Vanish/Unvanish.
+               usage: /vanish
 permissions:
       spigottest.cmd.furnace.change:
                default: op
