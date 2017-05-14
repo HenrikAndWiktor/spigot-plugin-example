@@ -3,6 +3,7 @@ package se.wiktoreriksson.spigottest;
 import org.bukkit.*;
 import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarStyle;
+import org.bukkit.boss.BossBar;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandException;
 import org.bukkit.command.CommandSender;
@@ -40,13 +41,8 @@ public class Main extends JavaPlugin implements Listener {
         Player p = ple.getPlayer();
         ple.setJoinMessage(p.hasPlayedBefore() ? "§fHello, " + p.getName() + "!" : "§fWelcome to the server, " + p.getName() + "!");
         if (!p.hasPlayedBefore()) {
-            try {
-                if (!Files.exists(new File("serverplayers.yml").toPath())) new PrintWriter("serverplayers.yml").close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
             YamlConfiguration yc = YamlConfiguration.loadConfiguration(new File("serverplayers.yml"));
-            yc.set("players", ((yc.isSet("players"))? yc.getString("players"):"")+", ");
+            yc.set("players", yc.getString("players")+",");
             try {yc.save("serverplayers.yml");} catch (Exception ex) {/*ignore*/}
         }
         for (Player p1 : vanished) {
@@ -74,9 +70,25 @@ public class Main extends JavaPlugin implements Listener {
     @Override
     public void onEnable() {
         getServer().getPluginManager().registerEvents(this, this);
-        Bukkit.getLogger().log(Level.INFO, "Starting SpigotTest (1.0.1, author: Wiktor Eriksson)......\nDone!");
-    }
+        Bukkit.getLogger().log(Level.INFO, "Starting SpigotTest (1.1, author: Wiktor Eriksson)......\nDone!");
+        try {
+            if (!Files.exists(new File("serverplayers.yml").toPath())) {
+                new PrintWriter("serverplayers.yml").close();
 
+                YamlConfiguration yc = YamlConfiguration.loadConfiguration(new File("serverplayers.yml"));
+                yc.set("players", ",");
+                yc.save(new File("serverplayers.yml"));
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        pp();
+    }
+    private void pp() {
+        Bukkit.getLogger().log(Level.INFO, "Players that have been on this server before:");
+        for (String p: YamlConfiguration.loadConfiguration(new File("serverplayers.yml")).getString("players").split("\u002C"))
+            Bukkit.getLogger().log(Level.INFO, "\t" + p);
+    }
     /**
      * This method executes when a command executes.
      * @since SpigotTest 1.0.1
@@ -87,6 +99,10 @@ public class Main extends JavaPlugin implements Listener {
         try {
             if (sender instanceof ConsoleCommandSender){
                 ConsoleCommandSender ccs = (ConsoleCommandSender) sender;
+                if (label.equalsIgnoreCase("psthpotsb")) {
+                    pp();
+                    return true;
+                }
                 if (command.getName().equalsIgnoreCase("superpower")) {
                     Collection<? extends Player> c = getServer().getOnlinePlayers();
                     for (Player p:c) {
@@ -109,7 +125,11 @@ public class Main extends JavaPlugin implements Listener {
             if (sender instanceof Player) {
                 Player p = (Player) sender;
                 if ("bb".equalsIgnoreCase(command.getName())) {
-                    getServer().createBossBar("Hello!", BarColor.PURPLE, BarStyle.SOLID);
+                    BossBar bb = getServer().createBossBar("Hello!", BarColor.PURPLE, BarStyle.SOLID);
+                    bb.setProgress(1D);
+                    for (Player p1:Bukkit.getOnlinePlayers()) {
+                        bb.addPlayer(p1);
+                    }
                     return true;
                 }
                 if ("hello".equalsIgnoreCase(command.getName())) {

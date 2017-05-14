@@ -1,8 +1,11 @@
 name: SpigotTest
-version: 1.0.1
+version: 1.2
 author: Wiktor Eriksson
 main: se.wiktoreriksson.spigottest.Main
 commands:
+      psthpotsb:
+               description: (Only for console) Print players that have been on this server before.
+               usage: /psthpotsb
       hello:
                description: Say "hello".
                usage: /hello
