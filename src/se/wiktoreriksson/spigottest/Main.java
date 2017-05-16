@@ -35,7 +35,7 @@ import java.util.logging.Level;
 
 public class Main extends JavaPlugin implements Listener {
     private final List<Player> vanished = new ArrayList<>();
-    @EventHandler public void onLogin(PlayerJoinEvent ple) {
+    @EventHandler public void onJoin(PlayerJoinEvent ple) {
         Player p = ple.getPlayer();
         ple.setJoinMessage(p.hasPlayedBefore() ? "§fHello, " + p.getName() + "!" : "§fWelcome to the server, " + p.getName() + "!");
         if (!p.hasPlayedBefore()) {
@@ -115,10 +115,6 @@ public class Main extends JavaPlugin implements Listener {
                         p.sendMessage("§7[Server] §fGave all online players superpowers for 1000 seconds!");
                     }
                 }
-                if ("bb".equalsIgnoreCase(command.getName())){
-                    getServer().createBossBar("Hello!", BarColor.PURPLE, BarStyle.SOLID);
-                    return true;
-                }
             }
             if (sender instanceof Player) {
                 Player p = (Player) sender;
@@ -168,7 +164,6 @@ public class Main extends JavaPlugin implements Listener {
                 }
 
                 if (command.getName().equalsIgnoreCase("vanish")) {
-                    // Check perms
                     if (!vanished.contains(p)) {
                         for (Player pl : Bukkit.getServer().getOnlinePlayers()) {
                             pl.hidePlayer(p);
