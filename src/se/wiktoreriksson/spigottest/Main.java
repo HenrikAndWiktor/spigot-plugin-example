@@ -32,9 +32,11 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class Main extends JavaPlugin implements Listener {
     private final List<Player> vanished = new ArrayList<>();
+    private final Logger log = Bukkit.getLogger();
     @EventHandler public void onJoin(PlayerJoinEvent ple) {
         Player p = ple.getPlayer();
         ple.setJoinMessage(p.hasPlayedBefore() ? "§fHello, " + p.getName() + "!" : "§fWelcome to the server, " + p.getName() + "!");
@@ -58,7 +60,7 @@ public class Main extends JavaPlugin implements Listener {
     @Override
     public void onDisable() {
         HandlerList.unregisterAll((Listener) this);
-        Bukkit.getLogger().log(Level.INFO, "Shutting down SpigotTest.......\nDone!");
+        log.log(Level.INFO, "Shutting down SpigotTest.......\nDone!");
     }
     /**
      * This method executes when this plugin enables.
@@ -68,7 +70,7 @@ public class Main extends JavaPlugin implements Listener {
     @Override
     public void onEnable() {
         getServer().getPluginManager().registerEvents(this, this);
-        Bukkit.getLogger().log(Level.INFO, "Starting SpigotTest (1.1, author: Wiktor Eriksson)......\nDone!");
+        log.log(Level.INFO, "Starting SpigotTest (1.1, author: Wiktor Eriksson)......\nDone!");
         try {
             if (!Files.exists(new File("serverplayers.yml").toPath())) {
                 new PrintWriter("serverplayers.yml").close();
@@ -83,9 +85,9 @@ public class Main extends JavaPlugin implements Listener {
         pp();
     }
     private void pp() {
-        Bukkit.getLogger().log(Level.INFO, "Players that have been on this server before:");
+        log.log(Level.INFO, "Players that have been on this server before:");
         for (String p: YamlConfiguration.loadConfiguration(new File("serverplayers.yml")).getString("players").split("\u002C"))
-            Bukkit.getLogger().log(Level.INFO, "\t" + p);
+            log.log(Level.INFO, "\t" + p);
     }
     /**
      * This method executes when a command executes.
